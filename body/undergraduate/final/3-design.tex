@@ -1,0 +1,102 @@
+\cleardoublepage
+
+\section{新的图卷积神经网络的设计}
+本部分将介绍，将图卷积神经网络等效为低通滤波器[11]的近期研究结果，并以此作为启示详细介绍我们
+设计的新图卷积神经网络。
+\subsection{低通滤波器}
+近期的研究，有学者提出了一个基于图信号处理的分析图神经网络的理论框架。实验结果表明，图神经网络
+只对特征向量进行低通滤波，不具有非线性流形学习的特征，他们进一步研究了网络对特征噪声的适应能力，
+并对基于GCN[12]的图神经网络设计提出了一些见解。
+\subsubsection{重要假设}
+
+    \textbf{假设1} \quad 输入的特征向量包含低频的真实信号和噪声，真实的特征量为机器学习提供充分的信息。
+    
+    这篇文章的作者，在常用的数据集上验证了假设1，实验结果（图3.1）显示了在具有不同数量频率成分的
+    特征向量上训练的两层感知器（MLP）的性能。在所有基准数据中，我们看到只有少量的频率成分有助于学习。当加入一
+    些高斯噪声，在特征向量中加入更多的频率分量只会降低性能。
+    \begin{figure}[ht]
+        \centering
+        \captionsetup{width=10cm}
+        \includegraphics[width=12cm]{design/1.jpg}
+        \caption{\label{3-1}对于Cora、citeseer、pubmed数据集，两层感知器（MLP）在不同频率的特征向量上的性能和gfNN网络最佳性能的对比}
+    \end{figure}
+    
+    \textbf{假设2} \quad 
+    观测到的特征信号${x(i)}_{i \in \nu}$包含了真实的信号${\bar{x}(i)}_{i \in \nu}$和噪声${z(i)}_{i \in \nu}$.
+    真实信号$\bar{X}$的频率大多在$ 0 \le \epsilon \ll 1 $，噪声按照高斯白噪声分布，噪声$Z$的傅里叶变换的每一项都独立地
+    服从正太分布$ N(0,\sigma^{2} ) $。
+
+
+\subsubsection{理论推导}
+不妨认为$ \hat{A}X $可以较精确地近似$ \bar{X} $，接下来理论推导图卷积神经网络的效果，具体细节可见[11]。
+我们可以将两层感知器（MLP）表示为：
+$$ h_{MLP}(X|W_1,W_2) = \sigma_{2}(\sigma_{1}(XW_1)W_2) $$
+其中$\sigma_{1}$代表ReLU函数，$\sigma_{2}$代表softmax函数。$\sigma_{1}$和$\sigma_{2}$都是一种收敛的映射，
+即$  \left \| \sigma_{i}（X）- \sigma_{i}（Y） \right \|_{D}  \le  \left \| X-Y \right \|_{D} $。
+
+在假设1的前提下，我们的目标是获得与$ h_{MLP}(\bar{X}|W_1,W_2) $相类似的结果。最简单的方法是用观测到的特征信号，
+来训练两层感知器（MLP）$ h_{MLP}(X|W_1,W_2) $。这种方法的效果可以做以下估计：
+$$  \left \| h_{MLP}(\bar{X}|W_1,W_2) - h_{MLP}(X|W_1,W_2) \right \|_{D}  \le  \left \| Z \right \|_{D} \rho(W_{1}) \rho(W_{2}) $$
+其中$ \rho(W) $是$W$的最大特征值。
+
+现在，我们可以先使用图滤波器$ \hat{A}X $来估计特征信号，然后再用感知器$ h_{MLP}(\hat{A}X|W_1,W_2) $来训练,
+通过推导我们可以得到以下结果：
+$$  \left \| h_{MLP}(\bar{X}|W_1,W_2) - h_{MLP}(\hat{A}X|W_1,W_2) \right \|_{D}  =  \tilde{0}(\sqrt[]{\epsilon }) E[\left \| Z \right \|_{D}] \rho(W_{1}) \rho(W_{2}) $$
+
+这意味着，如果真实数据的最大频率很小，我们可以这种方法得到一个近似于最优的解决方案。
+
+\subsubsection{阶段性结论}
+
+\begin{itemize}
+    \item \textbf{结论1} \quad
+    证明了将图信号与传播矩阵相乘，对应于图信号通过低通滤波。此外，还证明了观测信号与低通滤波器之间的
+    矩阵乘积，实际上是求真实信号估计问题的解析解。从图信号处理理论的角度，我们的结果表明，
+    图卷积层的设计，某种程度上就是低通滤波器的设计。
+    
+    \item \textbf{结论2} \quad
+    基于这种理论理解，它提出了一个新的图过滤神经网络框架gfNN来处理顶点分类问题。
+    gfNN网络包括两个步骤:1.通过与图过滤矩阵相乘来过滤特征；2.通过机器学习模型学习顶点标签。
+    gfNN神经网络结构与传统GCN神经网络结构对比，如图3.2所示。
+    \begin{figure}[ht]
+        \centering
+        \captionsetup{width=10cm}
+        \includegraphics[width=12cm]{design/2.jpg}
+        \caption{\label{3-1}GCN、SGC、gfNN 三种图卷积神经网络结构对比}
+    \end{figure}
+\end{itemize}
+
+\subsection{新的设计方法}
+由于效率、通用性和灵活性问题，空间模型在大多数场合比频谱模型更受欢迎。注意力机制图神经网络（GAT）
+是一种最为通用的空间模型，网络结构如图3.3所示，我们将基于GAT来提出我们的新的图卷积神经网络（our GAT）。
+
+我们在第二章理论基础部分，曾提及GAT神经网络的特点，现再对其主要缺点做简单总结。首先，是注意力
+矩阵$A$必须是1-hop的，如果直接将其变成2-hop将出现严重的过拟合现象；其次，我们观察图3.3，可以发现GAT有两层
+神经网络，这使得GAT需要较长的时间来训练网络，然而直接将GAT变成一层的神经网络，它的表达能力又将会
+大打折扣。
+
+为了解决上述两个问题，我们融合了频谱理论，提出了新的图卷积神经网络（our GAT），如图3.4所示。
+接下去，我们将详细介绍our GAT的神经网络结构。
+\begin{figure}[htbp]
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \captionsetup{width=5cm}
+    \includegraphics[width=6cm]{design/3.jpg}
+    \caption{\label{2-3}GAT}
+    \end{minipage}
+    \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \captionsetup{width=5cm}
+    \includegraphics[width=6cm]{design/4.jpg}
+    \caption{\label{2-4}our GAT}
+    \end{minipage}
+\end{figure}
+\subsubsection{第一步}
+\subsubsection{第二步}
+\subsubsection{第三步}
+\subsubsection{第四步}
+
+\subsection{新卷积神经网络的优势}
+\subsubsection{优点一}
+\subsubsection{优点二}
+\subsubsection{优点三}
