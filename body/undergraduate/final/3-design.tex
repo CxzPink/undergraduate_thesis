@@ -61,7 +61,7 @@ $$  \left \| h_{MLP}(\bar{X}|W_1,W_2) - h_{MLP}(\hat{A}X|W_1,W_2) \right \|_{D} 
         \centering
         \captionsetup{width=10cm}
         \includegraphics[width=12cm]{design/2.jpg}
-        \caption{\label{3-1}GCN、SGC、gfNN 三种图卷积神经网络结构对比}
+        \caption{\label{3-2}GCN、SGC、gfNN 三种图卷积神经网络结构对比}
     \end{figure}
 \end{itemize}
 
@@ -82,21 +82,85 @@ $$  \left \| h_{MLP}(\bar{X}|W_1,W_2) - h_{MLP}(\hat{A}X|W_1,W_2) \right \|_{D} 
     \centering
     \captionsetup{width=5cm}
     \includegraphics[width=6cm]{design/3.jpg}
-    \caption{\label{2-3}GAT}
+    \caption{\label{3-3}GAT}
     \end{minipage}
     \begin{minipage}[t]{0.48\textwidth}
     \centering
     \captionsetup{width=5cm}
     \includegraphics[width=6cm]{design/4.jpg}
-    \caption{\label{2-4}our GAT}
+    \caption{\label{3-4}our GAT}
     \end{minipage}
 \end{figure}
-\subsubsection{第一步}
-\subsubsection{第二步}
-\subsubsection{第三步}
-\subsubsection{第四步}
 
-\subsection{新卷积神经网络的优势}
-\subsubsection{优点一}
-\subsubsection{优点二}
-\subsubsection{优点三}
+\subsubsection{第一步}
+\begin{figure}[ht]
+    \centering
+    \captionsetup{width=10cm}
+    \includegraphics[width=12cm]{design/5.jpg}
+    \caption{\label{3-5}第一步}
+\end{figure}
+第一步，如图3.5所示，输入的特征信号$ X \in R^{F*n} $，通过待训练的权重矩阵$ W_1 \in R^{F'*F} $，输出的
+信号为$ W_{1}X \in R^{F'*n} $。其作用主要是给输入信号降维和线性变换。因为每个节点上的输入信号有时会有很高
+的维度，如在cora数据集中$ F = 1433 $，过高的特征维度势必会给后续的滤波和机器学习带来挑战，所以这一步我们使用
+权重矩阵$ W_1，\in R^{F'*F}，F \ll F $来对输入信号进行压缩和线性变换。
+
+\subsubsection{第二步}
+\begin{figure}[ht]
+    \centering
+    \captionsetup{width=10cm}
+    \includegraphics[width=12cm]{design/6.jpg}
+    \caption{\label{3-6}第二步}
+\end{figure}
+第二步，如图3.6所示，输入的信号为$ W_{1}X \in R^{F'*n} $，利用注意力参数$ \vec{a} \in R^{2F'} $，得到注意力矩阵
+$A \in R^{n*n}$。这一步的实现和GAT类似，主要作用是训练得到边权重（或称之为注意力权重）。注意力权重衡量节点$i$和
+它相邻节点$j$的连接权重，对于不相邻的节点，$A_{ij} = 0$，对于相邻的节点，$ A_{ij} = \frac{exp(LeakyReLU(\vec{a}^{T}[W_{1}\vec{x_{i}}||W_{1}\vec{x_{j}}]))} { {\textstyle \sum_{k\in N_{i} }^{}} exp(LeakyReLU(\vec{a}^{T}[W_{1}\vec{x_{i}}||W_{1}\vec{x_{k}}]))} $。
+相较于直接学习每条边的权重，借助注意力参数$ \vec{a} \in R^{2F'} $间接的生成边权重，减少了参数量，有效地避免了过拟合。
+
+\subsubsection{第三步}
+\begin{figure}[ht]
+    \centering
+    \captionsetup{width=10cm}
+    \includegraphics[width=12cm]{design/7.jpg}
+    \caption{\label{3-7}第三步}
+\end{figure}
+第三步，如图3.7所示，输入为注意力矩阵$A \in R^{n*n}$，通过矩阵多项式$ {\sum_{i=1}^{K}c_{i}A^{i}} $ ，得到新的矩阵
+$F(A) \in R^{n*n}$。这一步，是我们设计的图卷积神经网络的主要创新，将频谱理论中使用矩阵多项式的设计方法应用到GAT中来。
+我们在第二章理论基础中提到，GAT的图结构必须是1-hop，矩阵多项式使得我们自由选择图的hop。这是因为虽然注意力矩阵$A$的hop=1，
+但是它是自连的，所以它的矩阵多项式$ {\sum_{i=1}^{K}c_{i}A^{i}} $的hop值为$K$，这表明了不仅仅图上的相邻节点有连接权重，
+间接相连的节点同样有连接权重，这将大大增强图卷积神经网络的表达能力。
+
+\subsubsection{第四步}
+\begin{figure}[ht]
+    \centering
+    \captionsetup{width=10cm}
+    \includegraphics[width=12cm]{design/8.jpg}
+    \caption{\label{3-8}第四步}
+\end{figure}
+第四步，如图3.8所示，输入为经过滤波器$ F(A) $后的信号$ F(A)W_{1}X $，通过待训练的全连接层$ W_2 \in R^{F''*F'} $，
+得到输出信号为$ W_{2}F(A)W_{1}X \in R^{F''*n} $。其作用是得到我们期望的节点分类的结果。与卷积神经网络(CNN)类似，
+全连接层在整个网络中起到“分类器”的功能，将学到“分布式特征表示”映射到样本标记空间。即在图信号特征提取（滤波）之后，
+我们需要通过全连接层得到我们期待的节点分类的结果。
+
+\subsection{设计思路总结}
+总的来说，我们希望结合频谱模型和空间模型的设计方法，得到兼有其优点的图卷积神经网络。
+
+\begin{itemize}
+    \item \textbf{思路一} \quad
+    将注意力机制应用于图卷积神经网络。不仅仅在图神经网络，注意力机制几乎在所有类型的神经网络都取得巨大的成功，简单
+    的学习机制、较少的参数量、强大的表达能力，使得注意力机制成为了我们在设计复杂网络过程时的必然选择。此外，将注意力
+    机制应用在图卷积神经网络的效果，在GAT中已经有了清楚体现，所以我们选择注意力机制来设计我们的滤波器。
+    
+    \item \textbf{思路二} \quad
+    将矩阵多项式应用于图卷积神经网络。在频谱理论中，因为矩阵都是稀疏的，所以矩阵多项式能够使得图滤波器在很高的训练
+    效率下，获得出色的拟合能力。此外，矩阵多项式还在无形中拓宽了图结构的hop，所以如果能将矩阵多项式应用图滤波器的
+    设计，将在较小的训练代价下，使得神经网络的表达能力获得提高。
+
+    \item \textbf{思路三} \quad
+    相对于GAT网络，减少图滤波器的数量。在本章第一节，我们得到结论图卷积神经网络的效果类似于图低通滤波器，且过多的低通滤波
+    器不仅对滤波效果增强不大，还容易造成过拟合现象，所以gfNN网络仅用了一个低通滤波器就达到了理想的效果。我们在图3.3中可见，
+    GAT使用了$A_{1}$和$A_{2}$两个图滤波器，这对训练效率有很大的影响。所以如果图滤波器的数量存在冗余，我们能否更加合理地设计
+    图卷积神经网络，进而提高训练效率。
+
+\end{itemize}
+
+

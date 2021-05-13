@@ -1,6 +1,6 @@
 \cleardoublepage
 
-\section{理论基础 2000字}
+\section{理论基础}
 我们主要的研究内容是结合图信号处理的理论，设计图卷积神经网络(图2.1)中的图滤波器，
 即图卷积层。因此下面部分，我们将简单介绍图卷积神经网络的两种设计方法和他们的相关特点。
 
@@ -10,7 +10,10 @@
     \caption{\label{2-1}图信号经过图卷积层}
 \end{figure}
 
-\subsection{图结构介绍（看字数情况）}
+\subsection{图理论介绍}
+\subsubsection{图结构}
+\subsubsection{图相关矩阵}
+\subsubsection{图的hop}
 
 \subsection{基于频谱理论的图卷积神经网络}
 
@@ -88,7 +91,7 @@ $ y = V ({\sum_{i=0}^{K}} \beta_{i} T_{i}(\Lambda)) V^{T} x $，其中$ \beta $�
 \begin{figure}[ht]
     \centering
     \includegraphics[width=12cm]{theory/2.jpg}
-    \caption{\label{2-1}图像上的卷积 vs 图上的卷积}
+    \caption{\label{2-2}图像上的卷积 vs 图上的卷积}
 \end{figure}
 
 注意力机制图神经网络（GAT）是一种最常见的基于空间理论的方法，它假设相邻节点对中心节点的贡献既不完全相同
