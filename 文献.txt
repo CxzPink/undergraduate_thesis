@@ -4,13 +4,21 @@
 [4] LeCun Y, Bengio Y. Convolutional networks for images, speech, and time series[J]. The handbook of brain theory and neural networks, 1995, 3361(10): 1995.
 [5] Hochreiter S, Schmidhuber J. Long short-term memory[J]. Neural computation, 1997, 9(8): 1735-1780.
 [6] Vincent P, Larochelle H, Lajoie I, et al. Stacked denoising autoencoders: Learning useful representations in a deep network with a local denoising criterion[J]. Journal of machine learning research, 2010, 11(12).
-[7] Sandryhaila A, Moura J M F. Discrete signal processing on graphs[J]. IEEE transactions on signal processing, 2013, 61(7): 1644-1656.
-[8] Segarra S, Marques A G, Ribeiro A. Optimal graph-filter design and applications to distributed linear network operators[J]. IEEE Transactions on Signal Processing, 2017, 65(15): 4117-4131.
-[9] Scarselli F, Gori M, Tsoi A C, et al. The graph neural network model[J]. IEEE transactions on neural networks, 2008, 20(1): 61-80.
-[10] Kipf T N, Welling M. Variational graph auto-encoders[J]. arXiv preprint arXiv:1611.07308, 2016.
-[11] Bruna J, Zaremba W, Szlam A, et al. Spectral networks and locally connected networks on graphs[J]. arXiv preprint arXiv:1312.6203, 2013.
-[12] Defferrard M, Bresson X, Vandergheynst P. Convolutional neural networks on graphs with fast localized spectral filtering[J]. arXiv preprint arXiv:1606.09375, 2016.
-[13] Veličković P, Cucurull G, Casanova A, et al. Graph attention networks[J]. arXiv preprint arXiv:1710.10903, 2017.
-[14] Nt H, Maehara T. Revisiting graph neural networks: All we have is low-pass filters[J]. arXiv preprint arXiv:1905.09550, 2019.
-[15] Thomas N. Kipf and Max Welling. Semi-supervised classification with graph convolutional networks. In International Conference on Learning Representations, 2017.
-[16] Veličković P, Cucurull G, Casanova A, et al. Graph attention networks[J]. arXiv preprint arXiv:1710.10903, 2017.
+[7] Fan W, Ma Y, Li Q, et al. Graph neural networks for social recommendation[C]//The World Wide Web Conference. 2019: 417-426.
+[8] Li Y, Yu R, Shahabi C, et al. Diffusion convolutional recurrent neural network: Data-driven traffic forecasting[J]. arXiv preprint arXiv:1707.01926, 2017.
+[9] Wu S, Zhang M, Jiang X, et al. Personalizing graph neural networks with attention mechanism for session-based recommendation[J]. arXiv preprint arXiv:1910.08887, 2019.
+[10] Gasse M, Chételat D, Ferroni N, et al. Exact combinatorial optimization with graph convolutional neural networks[J]. arXiv preprint arXiv:1906.01629, 2019.
+[11] Chanussot L, Das A, Goyal S, et al. Open Catalyst 2020 (OC20) Dataset and Community Challenges[J]. ACS Catalysis, 2020, 11: 6059-6072.
+[12] Zhang G, He H, Katabi D. Circuit-GNN: Graph neural networks for distributed circuit design[C]//International Conference on Machine Learning. PMLR, 2019: 7364-7373.
+[13] Sandryhaila A, Moura J M F. Discrete signal processing on graphs[J]. IEEE transactions on signal processing, 2013, 61(7): 1644-1656.
+[14] Segarra S, Marques A G, Ribeiro A. Optimal graph-filter design and applications to distributed linear network operators[J]. IEEE Transactions on Signal Processing, 2017, 65(15): 4117-4131.
+[15] Shuman D I, Narang S K, Frossard P, et al. The emerging field of signal processing on graphs: Extending high-dimensional data analysis to networks and other irregular domains[J]. IEEE signal processing magazine, 2013, 30(3): 83-98.
+[16] Segarra S, Marques A G, Ribeiro A. Optimal graph-filter design and applications to distributed linear network operators[J]. IEEE Transactions on Signal Processing, 2017, 65(15): 4117-4131.
+[17] Scarselli F, Gori M, Tsoi A C, et al. The graph neural network model[J]. IEEE transactions on neural networks, 2008, 20(1): 61-80.
+[18] Kipf T N, Welling M. Variational graph auto-encoders[J]. arXiv preprint arXiv:1611.07308, 2016.
+[19] Bruna J, Zaremba W, Szlam A, et al. Spectral networks and locally connected networks on graphs[J]. arXiv preprint arXiv:1312.6203, 2013.
+[20] Defferrard M, Bresson X, Vandergheynst P. Convolutional neural networks on graphs with fast localized spectral filtering[J]. arXiv preprint arXiv:1606.09375, 2016.
+[21] Veličković P, Cucurull G, Casanova A, et al. Graph attention networks[J]. arXiv preprint arXiv:1710.10903, 2017.
+[22] Nt H, Maehara T. Revisiting graph neural networks: All we have is low-pass filters[J]. arXiv preprint arXiv:1905.09550, 2019.
+[23] Thomas N. Kipf and Max Welling. Semi-supervised classification with graph convolutional networks. In International Conference on Learning Representations, 2017.
+[24] Veličković P, Cucurull G, Casanova A, et al. Graph attention networks[J]. arXiv preprint arXiv:1710.10903, 2017.

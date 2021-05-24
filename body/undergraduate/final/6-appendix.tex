@@ -7,5 +7,24 @@
 
     \subsection{附录1}
 
+    \begin{table}[htb]
+        \centering
+        \caption{Citeseer数据集，三种神经网络效果对比}
+        \label{tabel6-1}
+        \begin{tabular}{|l|l|l|l|l|l|}
+        \hline
+                                    & 图结构hop的值           & 隐层输出维度 & 过拟合 & 训练时间(s)/epoch & 准确率(\%)       \\ \hline
+        \multirow{2}{*}{GAT}        & \multirow{2}{*}{1} & 32     & 不明显 & 0.23           & 73.2±0.3 \\ \cline{3-6} 
+                                    &                    & 64     & 不明显 & 0.23           & 72.6±0.2 \\ \hline
+        \multirow{2}{*}{Simple GAT} & \multirow{2}{*}{1} & 32     & 不明显 & 0.11           & 69.6±0.1 \\ \cline{3-6} 
+                                    &                    & 64     & 不明显 & 0.12           & 70.1±0.1 \\ \hline
+        \multirow{2}{*}{poly GAT}   & \multirow{2}{*}{3} & 32     & 不明显 & 0.12           & 72.5±0.2 \\ \cline{3-6} 
+                                    &                    & 64     & 不明显 & 0.14           & 73.1±0.1 \\ \hline
+        \end{tabular}
+    \end{table}
+
     \subsection{附录2}
-}
+
+    实验代码，见https://github.com/CxzPink/polyGAT.git
+
+    }
